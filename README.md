@@ -1,17 +1,7 @@
-# tyba_frontend_challenge
+# Tyba Frontend Challenge
+Este es el código del challenge de frontend para tyba, realizado en flutter con el patrón bloc usando la librería: https://bloclibrary.dev/
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# tyba-frontend-challenge
+## Requisitos
+1. Esta aplicación consume el API que hice anteriormente para el challenge de backend: https://github.com/juangalalz/tyba-challenge.
+2. Es necesario tener corriendo el backend local para poder crear usuarios hacer login y consultar restaurantes.
+3. Si se desea correr en celular se debe cambiar la variable ***baseUrl*** en el archivo: repositories/user_api_client.dart por la ip del pc donde esté corriendo el backend.
