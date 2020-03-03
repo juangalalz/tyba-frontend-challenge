@@ -21,29 +21,28 @@ void main() {
       providers: [
         BlocProvider<AuthenticationBloc>(
           create: (context) =>
-          AuthenticationBloc(userRepository: userRepository)
-            ..add(AppStarted())
-          ,
+              AuthenticationBloc(userRepository: userRepository)
+                ..add(AppStarted()),
         ),
         BlocProvider(
-          create: (context) =>
-              LoginBloc(
-                authenticationBloc: BlocProvider.of<AuthenticationBloc>(
-                    context),
-                userRepository: userRepository,
-              ),
+          create: (context) => LoginBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            userRepository: userRepository,
+          ),
         ),
+        BlocProvider(
+          create: (context) => UserBloc(
+            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
+            userRepository: userRepository,
+          ),
+        )
       ],
-      child: App(userRepository: userRepository),
+      child: App(),
     ),
   );
 }
 
 class App extends StatelessWidget {
-  final UserRepository userRepository;
-
-  App({Key key, @required this.userRepository}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -61,10 +60,10 @@ class App extends StatelessWidget {
             );
           }
           if (state is AuthenticationAuthenticated) {
-            homeWidget = Home(userRepository: userRepository);
+            homeWidget = Home();
           }
           if (state is AuthenticationUnauthenticated) {
-            homeWidget = Login(userRepository: userRepository);
+            homeWidget = Login();
           }
           if (state is AuthenticationLoading) {
             homeWidget = Center(

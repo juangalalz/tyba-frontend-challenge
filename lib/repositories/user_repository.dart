@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:tyba_frontend_challenge/models/models.dart';
+import 'package:tyba_frontend_challenge/pages/restaurants/restaurants.dart';
 import 'package:tyba_frontend_challenge/repositories/user_api_client.dart';
 
 
@@ -58,7 +59,7 @@ class UserRepository {
     String authUserString = _sharedPreferences.getString(authUserKey);
     User user;
     if (authUserString != null) {
-      final json = authUserString != null ? jsonDecode(authUserString) : null;
+      final json = jsonDecode(authUserString);
       user = User.fromLocalJson(json);
     }
 
@@ -68,6 +69,26 @@ class UserRepository {
   Future<Position> getLocation() async {
     Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     return position;
+  }
+
+  Future<List<Restaurant>> fetchRestaurants({
+    @required String lat,
+    @required String lng,
+  }) async {
+    final SharedPreferences _sharedPreferences =
+    await SharedPreferences.getInstance();
+    String authUserString = _sharedPreferences.getString(authUserKey);
+    if (authUserString == null) {
+      throw Exception('Wrong petition');
+    }
+    final json = jsonDecode(authUserString);
+    final User user = User.fromLocalJson(json);
+    final List<Restaurant> restaurants = await userApiClient.fetchRestaurants(
+      lat: lat,
+      lng: lng,
+      token: user.token,
+    );
+    return restaurants;
   }
 
 

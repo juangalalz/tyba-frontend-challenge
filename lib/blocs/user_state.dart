@@ -33,4 +33,15 @@ class UserLocationLoaded extends UserState {
   List<Object> get props => [position];
 }
 
+class UserRestaurantsLoading extends UserState {}
+
+class UserRestaurantsLoaded extends UserState {
+  final List<Restaurant> restaurants;
+
+  const UserRestaurantsLoaded({@required this.restaurants}) : assert(restaurants != null);
+
+  @override
+  List<Object> get props => [restaurants];
+}
+
 class UserError extends UserState {}

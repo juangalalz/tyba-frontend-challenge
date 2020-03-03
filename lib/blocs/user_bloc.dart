@@ -25,6 +25,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield* _mapFetchUserToState(event);
     } else if (event is GetUserLocation) {
       yield* _mapGetUserLocationToState(event);
+    } else if (event is FetchRestaurants) {
+      yield* _mapFetchRestaurantsToState(event);
     }
   }
 
@@ -43,6 +45,22 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       final Position position = await userRepository.getLocation();
       yield UserLocationLoaded(position: position);
+    } catch (_) {
+      yield UserError();
+    }
+  }
+
+  Stream<UserState> _mapFetchRestaurantsToState(FetchRestaurants event) async* {
+    yield UserLoading();
+    try {
+      final List<Restaurant> restaurants = await userRepository.fetchRestaurants(
+          lat: event.lat,
+        lng: event.lng,
+
+
+
+      );
+      yield UserRestaurantsLoaded(restaurants: restaurants);
     } catch (_) {
       yield UserError();
     }

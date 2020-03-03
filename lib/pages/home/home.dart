@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tyba_frontend_challenge/blocs/blocs.dart';
-import 'package:tyba_frontend_challenge/repositories/user_repository.dart';
+import 'package:tyba_frontend_challenge/pages/restaurants/restaurants.dart';
 
 class Home extends StatelessWidget {
-  final UserRepository userRepository;
-
-  Home({Key key, @required this.userRepository})
-      : assert(userRepository != null),
-        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,23 +14,12 @@ class Home extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.exit_to_app),
             onPressed: () async {
-                BlocProvider.of<AuthenticationBloc>(context)
-                    .add(LoggedOut());
-
+              BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
             },
           )
         ],
       ),
-      body: BlocProvider(
-        create: (context) {
-          return UserBloc(
-            authenticationBloc: BlocProvider.of<AuthenticationBloc>(context),
-            userRepository: userRepository,
-          )
-          ..add(FetchUser());
-        },
-        child: HomeBody(),
-      ),
+      body: HomeBody(),
     );
   }
 }
@@ -49,6 +33,12 @@ class _HomeBodyState extends State<HomeBody> {
   final _longController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    BlocProvider.of<UserBloc>(context).add(FetchUser());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,10 +66,18 @@ class _HomeBodyState extends State<HomeBody> {
           );
         }
         if (state is UserLocationLoaded) {
-          print('position');
-          print(state.position);
           _latController.text = state.position.latitude.toString();
           _longController.text = state.position.longitude.toString();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  Restaurants(
+                    lat: state.position.latitude,
+                    lng: state.position.longitude,
+                  ),
+            ),
+          );
         }
       },
       child: BlocBuilder<UserBloc, UserState>(

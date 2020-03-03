@@ -49,4 +49,26 @@ class UserApiClient {
     final signUpJson = jsonDecode(signUpResponse.body);
     return User.fromCreateJson(signUpJson);
   }
+
+  Future<List<Restaurant>> fetchRestaurants({
+    @required String lat,
+    @required String lng,
+    @required String token,
+  }) async {
+    final restaurantsUrl = '$baseUrl/api/users/restaurants?lat=$lat&lng=$lng';
+    final restaurantsResponse = await this.httpClient.get(restaurantsUrl,
+        headers: {
+          "Authorization": "Bearer $token"
+        });
+    if (restaurantsResponse.statusCode != 200) {
+      throw Exception('Wrong petition');
+    }
+
+
+    var list = json.decode(restaurantsResponse.body)['data'] as List;
+    List<Restaurant> restaurant = list.map((i) => Restaurant.fromJson(i)).toList();
+
+    return restaurant;
+  }
+
 }

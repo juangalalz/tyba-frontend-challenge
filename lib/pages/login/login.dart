@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tyba_frontend_challenge/blocs/blocs.dart';
 import 'package:tyba_frontend_challenge/pages/sign_up/sign_up.dart';
-import 'package:tyba_frontend_challenge/repositories/user_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Login extends StatelessWidget {
-  final UserRepository userRepository;
-
-  Login({Key key, @required this.userRepository})
-      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
